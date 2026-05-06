@@ -12,6 +12,6 @@ labels.bin
 # IDE
 .vscode/
 .idea/
-
+.claude
 # Local override
 docker-compose.override.yml
