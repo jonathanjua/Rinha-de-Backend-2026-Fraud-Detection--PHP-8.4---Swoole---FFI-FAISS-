@@ -1,0 +1,88 @@
+# ─────────────────────────────────────────────────────────────
+# docker-compose.yml para a branch `submission`.
+#
+# Diferenças vs. o compose da branch main:
+#   - Sem `build:` (a Rinha Engine apenas roda `docker compose up`)
+#   - `image:` aponta pra registry público (Docker Hub / GHCR)
+#
+# Antes de copiar pra branch `submission`, substitua a placeholder
+# <SEU_REGISTRY>/rinha-fraud-php:<TAG> pela imagem que você publicou.
+# Exemplo: docker.io/jalmeida/rinha-fraud-php:1.0
+# ─────────────────────────────────────────────────────────────
+
+x-api-defaults: &api-defaults
+  image: <SEU_REGISTRY>/rinha-fraud-php:<TAG>
+  volumes:
+    - sockets:/sockets
+  networks:
+    - app
+  ulimits:
+    nofile:
+      soft: 65536
+      hard: 65536
+  healthcheck:
+    test:
+      - CMD
+      - php
+      - -r
+      - $$s=@stream_socket_client('unix://'.getenv('SOCKET_PATH'),$$e,$$m,1);exit($$s?0:1);
+    interval: 3s
+    timeout: 2s
+    retries: 30
+    start_period: 5s
+
+services:
+  api1:
+    <<: *api-defaults
+    hostname: api1
+    environment:
+      INDEX_PATH:    /data/index.faiss
+      LABELS_PATH:   /data/labels.bin
+      MCC_RISK_PATH: /data/mcc_risk.json
+      SOCKET_PATH:   /sockets/api1.sock
+    deploy:
+      resources:
+        limits:
+          cpus: "0.45"
+          memory: "170MB"
+
+  api2:
+    <<: *api-defaults
+    hostname: api2
+    environment:
+      INDEX_PATH:    /data/index.faiss
+      LABELS_PATH:   /data/labels.bin
+      MCC_RISK_PATH: /data/mcc_risk.json
+      SOCKET_PATH:   /sockets/api2.sock
+    deploy:
+      resources:
+        limits:
+          cpus: "0.45"
+          memory: "170MB"
+
+  nginx:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - sockets:/sockets
+    ports:
+      - "9999:9999"
+    depends_on:
+      api1:
+        condition: service_healthy
+      api2:
+        condition: service_healthy
+    networks:
+      - app
+    deploy:
+      resources:
+        limits:
+          cpus: "0.10"
+          memory: "10MB"
+
+networks:
+  app:
+    driver: bridge
+
+volumes:
+  sockets:

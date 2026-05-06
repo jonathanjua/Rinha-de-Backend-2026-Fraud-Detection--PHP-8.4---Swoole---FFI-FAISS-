@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker --version)",
+      "Bash(docker compose *)",
+      "Bash(id -nG && ls -la /var/run/docker.sock 2>&1 | head -5)",
+      "Read(//var/run/**)",
+      "Bash(sg docker *)",
+      "Bash(curl -s http://localhost:9999/nginx-health)",
+      "Bash(curl -s -X POST http://localhost:9999/ -H 'Content-Type: application/json' -d '{\"amount\":1500,\"installments\":3,\"amount_vs_avg\":2.5,\"minutes_since_last\":30,\"distance_km\":12.4,\"tx_count_24h\":4,\"merchant_avg\":800,\"is_international\":0,\"is_card_present\":1,\"is_high_risk_mcc\":0,\"is_chargeback_history\":0,\"hour\":14,\"is_new_device\":0}')",
+      "Bash(curl -s -w \"\\\\nHTTP %{http_code} \\(%{time_total}s\\)\\\\n\" -X POST http://localhost:9999/ -H 'Content-Type: application/json' -d '{\"amount\":1500,\"installments\":3,\"amount_vs_avg\":2.5,\"minutes_since_last\":30,\"distance_km\":12.4,\"tx_count_24h\":4,\"merchant_avg\":800,\"is_international\":0,\"is_card_present\":1,\"is_high_risk_mcc\":0,\"is_chargeback_history\":0,\"hour\":14,\"is_new_device\":0}')",
+      "Bash(curl -s -w \"\\\\nHTTP %{http_code} \\(%{time_total}s\\)\\\\n\" -X POST http://localhost:9999/ -H 'Content-Type: application/json' -d '{\"amount\":9999,\"installments\":12,\"amount_vs_avg\":9.5,\"minutes_since_last\":0,\"distance_km\":900,\"tx_count_24h\":18,\"merchant_avg\":50,\"is_international\":1,\"is_card_present\":0,\"is_high_risk_mcc\":1,\"is_chargeback_history\":1,\"hour\":3,\"is_new_device\":1}')",
+      "Bash(curl -s -o /dev/null -w \"round-robin upstream test: HTTP %{http_code} %{time_total}s\\\\n\" -X POST http://localhost:9999/ -H 'Content-Type: application/json' -d '{\"amount\":100,\"hour\":12}')",
+      "Bash(zcat references.json.gz)",
+      "Bash(curl -s -w \"\\\\nHTTP %{http_code}\\\\n\" http://localhost:9999/ready)",
+      "Bash(curl -s -w '\\\\nHTTP %{http_code} \\(%{time_total}s\\)\\\\n' -X POST http://localhost:9999/fraud-score -H 'Content-Type: application/json' -d '{ *)",
+      "Bash(curl -s -o /dev/null -w '%{time_total}\\\\n' -X POST http://localhost:9999/fraud-score -H 'Content-Type: application/json' -d '{\"id\":\"tx-x\",\"transaction\":{\"amount\":41.12,\"installments\":2,\"requested_at\":\"2026-03-11T18:45:53Z\"},\"customer\":{\"avg_amount\":82.24,\"tx_count_24h\":3,\"known_merchants\":[\"MERC-003\",\"MERC-016\"]},\"merchant\":{\"id\":\"MERC-016\",\"mcc\":\"5411\",\"avg_amount\":60.25},\"terminal\":{\"is_online\":false,\"card_present\":true,\"km_from_home\":29.23},\"last_transaction\":null}')",
+      "Bash(awk ' *)",
+      "Bash(export LC_ALL)",
+      "Bash(sudo docker compose down -v)",
+      "Bash(sudo docker compose up --build -d)",
+      "Bash(curl -s -w \"HTTP %{http_code}\\\\n\" http://localhost:9999/ready)",
+      "Bash(curl -s -w \"\\\\nHTTP %{http_code} \\(%{time_total}s\\)\\\\n\" -X POST http://localhost:9999/fraud-score -H 'Content-Type: application/json' -d '{\"id\":\"tx-1\",\"transaction\":{\"amount\":41.12,\"installments\":2,\"requested_at\":\"2026-03-11T18:45:53Z\"},\"customer\":{\"avg_amount\":82.24,\"tx_count_24h\":3,\"known_merchants\":[\"MERC-003\",\"MERC-016\"]},\"merchant\":{\"id\":\"MERC-016\",\"mcc\":\"5411\",\"avg_amount\":60.25},\"terminal\":{\"is_online\":false,\"card_present\":true,\"km_from_home\":29.23},\"last_transaction\":null}')",
+      "Bash(curl -s -w \"\\\\nHTTP %{http_code} \\(%{time_total}s\\)\\\\n\" -X POST http://localhost:9999/fraud-score -H 'Content-Type: application/json' -d '{\"id\":\"tx-2\",\"transaction\":{\"amount\":9505.97,\"installments\":10,\"requested_at\":\"2026-03-14T05:15:12Z\"},\"customer\":{\"avg_amount\":81.28,\"tx_count_24h\":20,\"known_merchants\":[\"MERC-008\",\"MERC-007\",\"MERC-005\"]},\"merchant\":{\"id\":\"MERC-068\",\"mcc\":\"7802\",\"avg_amount\":54.86},\"terminal\":{\"is_online\":false,\"card_present\":true,\"km_from_home\":952.27},\"last_transaction\":null}')",
+      "Bash(curl -s http://localhost:9999/ready)"
+    ]
+  }
+}

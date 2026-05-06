@@ -1,0 +1,7 @@
+{
+    "participants": ["Jonathan Almeida"],
+    "social": ["https://github.com/<SEU_USUARIO_GITHUB>"],
+    "source-code-repo": "https://github.com/<SEU_USUARIO_GITHUB>/<NOME_DO_REPO>",
+    "stack": ["php", "swoole", "ffi", "faiss", "nginx", "docker"],
+    "open_to_work": false
+}

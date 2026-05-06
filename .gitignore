@@ -1,0 +1,17 @@
+.DS_Store
+*.log
+.env
+.env.*
+!.env.example
+
+# Build artifacts
+/data/
+*.faiss
+labels.bin
+
+# IDE
+.vscode/
+.idea/
+
+# Local override
+docker-compose.override.yml
