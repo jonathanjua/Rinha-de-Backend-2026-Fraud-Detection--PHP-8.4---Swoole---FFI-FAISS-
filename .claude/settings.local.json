@@ -25,7 +25,16 @@
       "Bash(curl -s http://localhost:9999/ready)",
       "Bash(mkdir -p .github/workflows)",
       "Bash(git ls-tree *)",
-      "Bash(chmod +x \"/home/jonathan/Sites/PHP 8.4 + Swoole \\(HTTP\\) + FFI/scripts/build-index.sh\")"
+      "Bash(chmod +x \"/home/jonathan/Sites/PHP 8.4 + Swoole \\(HTTP\\) + FFI/scripts/build-index.sh\")",
+      "Bash(git check-ignore *)",
+      "Bash(git -c core.excludesfile=/dev/null status)",
+      "Read(//home/jonathan/.config/git/**)",
+      "Read(//home/jonathan/**)",
+      "Bash(cat .git/info/exclude)",
+      "Bash(ls .git/info/)",
+      "Bash(git config *)",
+      "Bash(git update-index *)",
+      "Bash(gh run *)"
     ],
     "additionalDirectories": [
       "/home/jonathan/Sites/PHP 8.4 + Swoole (HTTP) + FFI/.github"
