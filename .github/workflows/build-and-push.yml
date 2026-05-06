@@ -1,0 +1,48 @@
+name: build-and-push
+
+on:
+  push:
+    branches: [main, submission]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restore cached FAISS index
+        id: idx-cache
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: faiss-data-${{ hashFiles('resources/references.json.gz', 'build.php', 'faiss.h') }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build FAISS index (cache miss only)
+        if: steps.idx-cache.outputs.cache-hit != 'true'
+        run: ./scripts/build-index.sh
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push runtime image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.api
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/rinha-fraud-php:latest
+            ghcr.io/${{ github.repository_owner }}/rinha-fraud-php:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
