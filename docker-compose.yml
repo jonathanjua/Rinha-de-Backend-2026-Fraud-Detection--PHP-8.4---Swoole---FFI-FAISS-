@@ -12,7 +12,10 @@
 # ─────────────────────────────────────────────────────────────
 
 x-api-defaults: &api-defaults
-  image: ${IMAGE:-ghcr.io/jonathanjua/rinha-fraud-php:latest}
+  image: ${IMAGE:-rinha-fraud-php:latest}
+  build:
+    context: .
+    dockerfile: Dockerfile.api
   volumes:
     - sockets:/sockets
   networks:

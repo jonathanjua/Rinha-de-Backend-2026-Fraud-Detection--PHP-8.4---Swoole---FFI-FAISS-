@@ -49,10 +49,8 @@ COPY --from=faiss-build /src/faiss/build/faiss/libfaiss.so   /usr/local/lib/
 RUN ldconfig
 
 # ════════════════════════════════════════════════════════════════════
-# Stage 3 (opcional, --target index-build): gera index.faiss + labels.bin
-#          a partir de references.json.gz. Rodado UMA VEZ localmente
-#          via scripts/build-index.sh — os artefatos saem em ./data/
-#          no host e são consumidos pelo stage `runtime` abaixo.
+# Stage 3: Constrói o índice FAISS a partir das referências
+#          (executa build.php uma única vez no image build)
 # ════════════════════════════════════════════════════════════════════
 FROM php-base AS index-build
 
@@ -69,8 +67,6 @@ RUN php -d memory_limit=4G -d ffi.enable=true build.php \
 
 # ════════════════════════════════════════════════════════════════════
 # Stage 4: Runtime final, enxuto
-#          Espera ./data/index.faiss e ./data/labels.bin no contexto
-#          (gerados previamente por scripts/build-index.sh).
 # ════════════════════════════════════════════════════════════════════
 FROM php-base AS runtime
 
@@ -89,9 +85,9 @@ RUN { \
     } > /usr/local/etc/php/conf.d/zz-rinha.ini
 
 # Artefatos pré-construídos (read-only, mmap-friendly)
-COPY data/index.faiss        /data/index.faiss
-COPY data/labels.bin         /data/labels.bin
-COPY resources/mcc_risk.json /data/mcc_risk.json
+COPY --from=index-build /data/index.faiss /data/index.faiss
+COPY --from=index-build /data/labels.bin  /data/labels.bin
+COPY resources/mcc_risk.json              /data/mcc_risk.json
 
 # Aplicação
 WORKDIR /app
